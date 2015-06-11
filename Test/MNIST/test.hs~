@@ -1,0 +1,147 @@
+import Debug.Trace
+
+import Data.Word
+import System.Random
+import Data.Bits
+import Data.Foldable
+import System.Endian
+import Data.Binary.Get
+import qualified Data.IntMap as IMap
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as BL
+import qualified Data.Vector.Unboxed as UV
+
+import Algorithms.Hungarian
+
+import HMeans
+
+
+
+getInt32 :: BL.ByteString -> (Int, BL.ByteString)
+getInt32 b = (a', rest)
+  where 
+    (a, rest) = getInt32' 4 b
+    a' = a --toSomething $ fromBE32 $ fromInteger $ toSomethingeger a
+
+    getInt32' :: Int -> BL.ByteString -> (Int, BL.ByteString)
+    getInt32' 0 bs = (0, bs)
+    getInt32' n bs = ((shift (toSomething (BL.head bs)) (8 * (n - 1))) + m, bs')
+      where
+        (m, bs') = getInt32' (n - 1) (BL.tail bs)
+
+getSomething8 :: Num a => BL.ByteString -> (a, BL.ByteString)
+getSomething8 b = (toSomething $ BL.head b, BL.tail b)
+
+
+
+getImages :: Int -> Int -> BL.ByteString -> [DoubleIntMap]
+getImages n sz b = fst $ getImages' n sz b
+  where
+    getImages' 0 _ b = ([], b)
+    getImages' n sz b = (img : imgs, b'')
+      where 
+        (img, b') = getImage sz b
+        (imgs, b'') = getImages' (n - 1) sz b'
+
+    getImage :: Int -> BL.ByteString -> (DoubleIntMap, BL.ByteString)
+    getImage sz b = (vs, rest)
+      where
+        (ds, rest) = getImage' sz b
+        vs = IMap.fromList ds
+
+        getImage' 0 b = ([], b)
+        getImage' n b = if pixel > 0 
+                          then ((n, pixel) : pixels, b'')
+                          else (pixels, b'')
+          where
+            (pixel, b') = getSomething8 b
+            (pixels, b'') = getImage' (n-1) b'
+
+readImages :: BL.ByteString -> ([DoubleIntMap], Int)
+readImages b = (getImages n sz b', n)
+  where
+    (_, b2) = getInt32 b
+    (n, b3) = getInt32 b2
+    (w, b4) = getInt32 b3
+    (h, b') = getInt32 b4
+    sz = w * h
+
+
+getLabels :: Int -> BL.ByteString -> [Int]
+getLabels n = getLabels' n
+  where
+    getLabels' 0 _ = []
+    getLabels' n b = i : getLabels' (n-1) b'
+      where
+        (i, b') = getSomething8 b
+
+readLabels :: BL.ByteString -> [Int]
+readLabels b = getLabels n b'
+  where
+    (_, b2) = getInt32 b
+    (n, b') = getInt32 b2
+
+
+addAllExcept :: (Int, Int) -> [Double] -> [Double]
+addAllExcept (i, j) = addAllExcept' (10 * i) (10 * (i + 1)) (10*i + j) 0
+  where
+    addAllExcept' :: Int -> Int -> Int -> Int -> [Double] -> [Double]
+    addAllExcept' _ _ _ _ [] = []
+    addAllExcept' fr to n i (x:xs) | fr <= i && i <= to && i /= n    = x + 1 : addAllExcept' fr to n (i+1) xs
+                                   | otherwise                       = x     : addAllExcept' fr to n (i+1) xs
+
+
+runHungarian :: [Int] -> [Int] -> ([(Int, Int)], Double)
+runHungarian x y = hungarian m 10 10
+  where
+    m = foldr' ($) (take 100 $ repeat 0) $ fmap addAllExcept $ zip x y
+
+
+main = do 
+  file <- BL.readFile "hcluster_input"
+  file' <- BL.readFile "hcluster_input"
+  label_file <- BL.readFile "hcluster_labels"
+  randomGen <- getStdGen
+
+{-  let n = 1000
+  let rawImages = take n $ fst $ readImages file
+  let rawImages' = take n $ fst $ readImages file
+  let labels = take n $ readLabels label_file -}
+  let (rawImages, n) = readImages file
+  let (rawImages', _) = readImages file'
+  let labels = readLabels label_file
+
+  let params = Params 100 10 n (28*28) (HierarchicalParams UPGMA)
+  let images = toBasicData rawImages
+  let initialPartition = randomInitialize params randomGen images
+
+
+  let images' = map (trainDataPoint initialPartition) $ toBasicData rawImages'
+  let train1 = train images'
+
+  let clusters = runHierarchical params train1 
+  let clustersLabels = partitionToLabelList clusters
+
+--  let labels = [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0]
+--  let clustersLabels = [1,2,3,3,5,6,7,8,9,9,1,2,3,4,5,5,7,8,9,0]
+
+  let (hungarianPairs, hungarianScore) = runHungarian clustersLabels labels
+  let hungarianMap = IMap.fromList hungarianPairs
+
+  let mappedClustersLabels = map (hungarianMap IMap.!) clustersLabels
+
+
+  putStrLn $ "HMeans test script:"
+  putStrLn $ "Base partition selected:"
+  putStrLn $ show initialPartition
+  putStrLn $ "---------------------------------------------------------------------------------"
+  putStrLn $ "Resulting partition:"
+  putStrLn $ show train1
+  putStrLn $ "---------------------------------------------------------------------------------"
+  putStrLn $ "Clusters found:"
+  putStrLn $ show clusters
+--  putStrLn $ show $ zip mappedClustersLabels labels
+  putStrLn $ "---------------------------------------------------------------------------------"
+  putStrLn $ "Score:"
+  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething n)) ++ "%)"
+  putStrLn $ "Done" 
