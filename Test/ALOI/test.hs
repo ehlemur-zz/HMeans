@@ -16,7 +16,7 @@ lineToDoubleVector n s = UV.fromList $ map read $ take n s
 ----------------------------------------------------------------------------------------------------
 
 lineToLabel :: Int -> [String] -> Int
-lineToLabel n s = read $ drop 4 $ dropLast $ head $ drop n s
+lineToLabel n s = read $ head $ drop n s
   where
     dropLast :: [a] -> [a]
     dropLast [_] = []
@@ -26,7 +26,7 @@ lineToLabel n s = read $ drop 4 $ dropLast $ head $ drop n s
 
 readALOI :: IO [BasicData DoubleVector]
 readALOI = do 
-  let dimension = 7 * 2 * 2
+  let dimension = 2
   csv_input <- readFile "aloi_input.csv"
 
   return $ toBasicData $ map (lineToDoubleVector dimension . words) $ lines csv_input
@@ -35,7 +35,7 @@ readALOI = do
 
 readLabels :: IO [Int]
 readLabels = do
-  let dimension = 7 * 2 * 2
+  let dimension = 2
   csv_input <- readFile "aloi_input.csv"
 
   return $ map (lineToLabel dimension . words) $ lines csv_input
@@ -63,10 +63,10 @@ addAllExcept (i, j) = addAllExcept' (10 * i) (10 * (i + 1)) (10*i + j) 0
 
 main = do 
 
-  let nImages = 110250
-  let dimension = 7 * 2 * 2
+  let nImages = 500
+  let dimension = 2
 
-  let aloiParams = Params 3000 1000 nImages dimension (KMeansParams 1000)
+  let aloiParams = Params 8 4 nImages dimension (KMeansParams 1000)
 
   putStrLn $ "HMeans test script:"
 
@@ -100,8 +100,11 @@ main = do
   
   putStrLn $ "Label list: "
   putStrLn $ show $ zip aloiLabels cLabels
---  putStrLn $ "Score:"
---  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething nImages)) ++ "%)"
+  
+  putStrLn $ "---------------------------------------------------------------------------------"
+
+  putStrLn $ "Score:"
+  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething nImages)) ++ "%)"
   
   putStrLn $ "---------------------------------------------------------------------------------"
 

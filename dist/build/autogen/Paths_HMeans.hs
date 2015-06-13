@@ -16,11 +16,11 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "C:\\Users\\w7\\AppData\\Roaming\\cabal\\bin"
-libdir     = "C:\\Users\\w7\\AppData\\Roaming\\cabal\\x86_64-windows-ghc-7.8.3\\HMeans-0.1.0.0"
-datadir    = "C:\\Users\\w7\\AppData\\Roaming\\cabal\\x86_64-windows-ghc-7.8.3\\HMeans-0.1.0.0"
-libexecdir = "C:\\Users\\w7\\AppData\\Roaming\\cabal\\HMeans-0.1.0.0"
-sysconfdir = "C:\\Users\\w7\\AppData\\Roaming\\cabal\\etc"
+bindir     = "/home/lemur/.cabal/bin"
+libdir     = "/home/lemur/.cabal/lib/x86_64-linux-ghc-7.8.3/HMeans-0.1.0.0"
+datadir    = "/home/lemur/.cabal/share/x86_64-linux-ghc-7.8.3/HMeans-0.1.0.0"
+libexecdir = "/home/lemur/.cabal/libexec"
+sysconfdir = "/home/lemur/.cabal/etc"
 
 getBinDir, getLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "HMeans_bindir") (\_ -> return bindir)
@@ -32,4 +32,4 @@ getSysconfDir = catchIO (getEnv "HMeans_sysconfdir") (\_ -> return sysconfdir)
 getDataFileName :: FilePath -> IO FilePath
 getDataFileName name = do
   dir <- getDataDir
-  return (dir ++ "\\" ++ name)
+  return (dir ++ "/" ++ name)

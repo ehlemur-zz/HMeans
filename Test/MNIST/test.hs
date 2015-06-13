@@ -6,6 +6,8 @@ import Data.Bits
 import Data.Foldable
 import System.Endian
 import Data.Binary.Get
+import Criterion.Measurement
+import Control.Exception.Base
 import qualified Data.IntMap as IMap
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
@@ -21,16 +23,16 @@ getInt32 :: BL.ByteString -> (Int, BL.ByteString)
 getInt32 b = (a', rest)
   where 
     (a, rest) = getInt32' 4 b
-    a' = a --toSomething $ fromBE32 $ fromInteger $ toSomethingeger a
+    a' = a --toNum $ fromBE32 $ fromInteger $ toNumeger a
 
     getInt32' :: Int -> BL.ByteString -> (Int, BL.ByteString)
     getInt32' 0 bs = (0, bs)
-    getInt32' n bs = ((shift (toSomething (BL.head bs)) (8 * (n - 1))) + m, bs')
+    getInt32' n bs = ((shift (toNum (BL.head bs)) (8 * (n - 1))) + m, bs')
       where
         (m, bs') = getInt32' (n - 1) (BL.tail bs)
 
-getSomething8 :: Num a => BL.ByteString -> (a, BL.ByteString)
-getSomething8 b = (toSomething $ BL.head b, BL.tail b)
+getNum8 :: Num a => BL.ByteString -> (a, BL.ByteString)
+getNum8 b = (toNum $ BL.head b, BL.tail b)
 
 
 
@@ -54,7 +56,7 @@ getImages n sz b = fst $ getImages' n sz b
                           then ((n, pixel) : pixels, b'')
                           else (pixels, b'')
           where
-            (pixel, b') = getSomething8 b
+            (pixel, b') = getNum8 b
             (pixels, b'') = getImage' (n-1) b'
 
 readImages :: BL.ByteString -> ([DoubleIntMap], Int)
@@ -73,7 +75,7 @@ getLabels n = getLabels' n
     getLabels' 0 _ = []
     getLabels' n b = i : getLabels' (n-1) b'
       where
-        (i, b') = getSomething8 b
+        (i, b') = getNum8 b
 
 readLabels :: BL.ByteString -> [Int]
 readLabels b = getLabels n b'
@@ -98,52 +100,115 @@ runHungarian x y = hungarian m 10 10
 
 
 main = do 
-  file <- BL.readFile "hcluster_input"
-  file' <- BL.readFile "hcluster_input"
-  file'' <- BL.readFile "hcluster_input"
-  label_file <- BL.readFile "hcluster_labels"
-  label_file' <- BL.readFile "hcluster_labels"
-  randomGen <- getStdGen
+  let loopHierarchical :: HMeansParams -> Int -> IO () 
+      loopHierarchical hParameters nImages = 
+        do let params = Params undefined 10 nImages (28*28) hParameters
+           t        <- getTime
+           
+           labels   <- BL.readFile "mnist_labels"
+                            >>= wrap readLabels
+                            >>= wrap (take nImages)
+           
+           clusters <- BL.readFile "mnist_input" 
+                            >>= wrap (fst . readImages) 
+                            >>= wrap (take nImages) 
+                            >>= wrap toBasicData
+                            >>= wrap (map $ toCluster)
+                            >>= wrap (zip [0..])
+                            >>= wrap (Partition . IMap.fromList)
+                            >>= wrap (runHierarchical params)           
 
-  let n = 500
-  let rawImages = take n $ fst $ readImages file
-  let rawImages' = take n $ fst $ readImages file'
-  let rawImages'' = take n $ fst $ readImages file''
-  let labels = take n $ readLabels label_file 
-  let labels' = take n $ readLabels label_file'
-{-  let (rawImages, n) = readImages file
-  let (rawImages', _) = readImages file'
-  let (rawImages'', _) = readImages file''
-  let labels = readLabels label_file
-  let labels' = readLabels label_file'-}
+           evaluate clusters
+                        
+           t'       <- getTime
 
---  let params = Params 100 10 n (28*28) (HierarchicalParams UPGMA)
-  let params = Params 100 10 n (28*28) (KMeansParams 1000)
-  let images = toBasicData rawImages
-  let initialPartition = randomInitialize params randomGen images
+           let kmeansResult = partitionToLabelList clusters
+           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
 
+           putStrLn $ "Hierachical Score with " ++ show nImages ++ " points:"
+           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
+           putStrLn $ "  " ++ (secs $ t' - t)
+     
+           if nImages + 200 > 60000 then
+             return ()
+           else
+             loopHierarchical hParameters (nImages + 200)
 
-  let images' = map (trainDataPoint initialPartition) $ toBasicData rawImages'
-  let train1 = train images'
+  let loopHMeans :: HMeansParams -> Int -> Int -> IO () 
+      loopHMeans hParameters nMicro nImages = 
+        do let params = Params nMicro 10 nImages (28*28) hParameters
+           t             <- getTime
+           
+           labels        <- BL.readFile "mnist_labels"
+                            >>= wrap readLabels
+                            >>= wrap (take nImages)
+           
+           randomSeed    <- getStdGen
 
-  let clusters = runHMeans params train1 
-  let clustersLabels = partitionToLabelList clusters
+           microclusters <- BL.readFile "mnist_input" 
+                            >>= wrap (fst . readImages) 
+                            >>= wrap (take nImages) 
+                            >>= wrap toBasicData
+                            >>= wrap (randomInitialize params randomSeed)
+           
+           clusters      <- BL.readFile "mnist_input"
+                            >>= wrap (fst . readImages) 
+                            >>= wrap (take nImages) 
+                            >>= wrap toBasicData
+                            >>= wrap (map $ trainSingle microclusters)
+                            >>= wrap train
+                            >>= wrap (runHMeans params)
 
---  let labels = [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0]
---  let clustersLabels = [1,2,3,3,5,6,7,8,9,9,1,2,3,4,5,5,7,8,9,0]
+           evaluate clusters
+                        
+           t'            <- getTime
 
-  let (hungarianPairs, hungarianScore) = runHungarian clustersLabels labels
-  let hungarianMap = IMap.fromList hungarianPairs
+           let kmeansResult = partitionToLabelList clusters
+           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
 
-  let mappedClustersLabels = map (hungarianMap IMap.!) clustersLabels
- 
-  let params' = Params 500 10 n (28*28) (KMeansParams 1000)
-  let kmeansClusters = Partition $ IMap.fromList $ zip [0..] $ map toCluster $ toBasicData rawImages''
-  let kmeansResult = partitionToLabelList $ runHMeans params kmeansClusters
+           putStrLn $ "HMeans Score with " ++ show nImages ++ " points:"
+           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
+           putStrLn $ "  " ++ (secs $ t' - t)
+     
+           if nImages + 200 > 60000 then
+             return ()
+           else
+             loopHMeans hParameters nMicro (nImages + 200)
 
-  let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels'
+  let loopKMeans :: Int -> IO () 
+      loopKMeans nImages = 
+        do let params = Params undefined 10 nImages (28*28) (KMeansParams 1)
+           t        <- getTime
 
-  putStrLn $ "HMeans test script:"
+           labels   <- BL.readFile "mnist_labels"
+                            >>= wrap readLabels
+                            >>= wrap (take nImages)
+
+           clusters <- runKMeansIO params "mnist_input" 
+                       (\x -> (BL.readFile x >>= wrap (fst . readImages) >>= wrap (take nImages) >>= wrap toBasicData))
+              
+           t'       <- getTime
+
+           let kmeansResult = partitionToLabelList clusters
+           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
+           
+           putStrLn $ "KMeans Score with " ++ show nImages ++ " points:"
+           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
+           putStrLn $ "  " ++ (secs $ t' - t)
+     
+           if nImages + 200 > 60000 then
+             return ()
+           else
+             loopKMeans (nImages + 200)
+
+  initializeTime
+
+  loopHMeans (HierarchicalParams UPGMA) 100 20
+  loopHierarchical (HierarchicalParams UPGMA) 20
+
+  
+
+  {-putStrLn $ "HMeans test script:"
   putStrLn $ "Base partition selected:"
   putStrLn $ show initialPartition
   putStrLn $ "---------------------------------------------------------------------------------"
@@ -155,8 +220,6 @@ main = do
 --  putStrLn $ show $ zip mappedClustersLabels labels
   putStrLn $ "---------------------------------------------------------------------------------"
   putStrLn $ "Score:"
-  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething n)) ++ "%)"
-  putStrLn $ "---------------------------------------------------------------------------------"
-  putStrLn $ "KMeans Score:"
-  putStrLn $ "\t" ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toSomething n)) ++ "%)"
-  putStrLn $ "Done" 
+  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toNum n)) ++ "%)"
+  putStrLn $ "---------------------------------------------------------------------------------"-}
+{-  putStrLn $ "Done" -}

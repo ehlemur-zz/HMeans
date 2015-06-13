@@ -29,7 +29,7 @@ parseImages =
      let loopImage :: Int -> Get [(Int, Double)]
          loopImage 0  = return []
          loopImage sz = 
-           do d <- liftM toNum getWord32be
+           do d <- liftM toNum getWord8
               ds <- loopImage (sz - 1)
               if d /= 0 then 
                 return $ (sz, d) : ds
@@ -50,8 +50,6 @@ inputSource inputFile =
   do fileStream <- BL.readFile inputFile 
      return $ toBasicData $ runGet parseImages fileStream 
 
-wrap :: (a -> b) -> a -> IO b
-wrap f a = return $ f a
 
 main = 
   do let inputFilename = "mnist_input"
@@ -67,8 +65,11 @@ main =
      let parameters = Params nMicroclusters nClusters nImages nDimensions hmeansParameters
 
      randomSeed <- getStdGen
-     microclusters <- inputSource inputFilename >>= wrap (randomInitialize parameters randomSeed)
-     clusters <- inputSource inputFilename >>= wrap (map $ trainSingle microclusters) >>= wrap train >>= wrap (runHMeans parameters)
+     --microclusters <- inputSource inputFilename >>= wrap (randomInitialize parameters randomSeed)
+     --clusters <- inputSource inputFilename >>= wrap (map $ trainSingle microclusters) >>= wrap train >>= wrap (runHMeans parameters)
      
-     
+     kmeansClusters <- runKMeansIO parameters inputFilename inputSource
+
+     putStrLn $ show $ kmeansClusters
+      
      return ()

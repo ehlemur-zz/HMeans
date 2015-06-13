@@ -2,21 +2,15 @@ import HMeans
 
 import Data.Ix
 import Debug.Trace
+import Control.Monad
 import Data.Foldable
 import System.Random
 import Algorithms.Hungarian
+import Criterion.Measurement
 
 import qualified Data.Vector.Unboxed as UV
 
 
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-
-dimension :: Int
-dimension = 76
-
-nDigits :: Int
-nDigits = 2000
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -35,8 +29,8 @@ lineToLabel n s = read $ drop 4 $ dropLast $ head $ drop n s
 
 ----------------------------------------------------------------------------------------------------
 
-readMFEAT :: IO [BasicData DoubleVector]
-readMFEAT = do 
+readMFEAT :: Int -> IO [BasicData DoubleVector]
+readMFEAT dimension = do 
   txt_input <- readFile "mfeat_input.txt"
 
   return $ toBasicData $ map (lineToDoubleVector dimension . words) $ lines txt_input
@@ -67,14 +61,78 @@ addAllExcept (i, j) = addAllExcept' (10 * i) (10 * (i + 1)) (10*i + j) 0
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 
-main = do 
-  let mfeatParams = Params 1000 10 nDigits dimension (KMeansParams 1000)
+runKWith :: Int -> Int -> Int -> [BasicData DoubleVector] -> [Int] -> IO Double
+runKWith nClasses nDigits dimension mfeatData mfeatLabels = do
+  let mfeatParams = Params nDigits nClasses nDigits dimension (KMeansParams 1000)
+
+  randomGen <- getStdGen
+  let microclusters = initialize mfeatParams mfeatData
+  let clusters = runHMeans mfeatParams microclusters
+
+  let cLabels = partitionToLabelList clusters
+  let (hungarianPairs, hungarianScore) = runHungarian nClasses cLabels mfeatLabels
+  
+  return $ 100 * hungarianScore / (toSomething nDigits)
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+runWith :: Int -> Int -> Int -> Int -> [BasicData DoubleVector] -> [Int] -> IO Double
+runWith nMicroclusters nClasses nDigits dimension mfeatData mfeatLabels = do
+  let mfeatParams = Params nMicroclusters nClasses nDigits dimension (KMeansParams 1000)
+
+  randomGen <- getStdGen
+  let microclusters = randomInitialize mfeatParams randomGen mfeatData
+  
+  let traind = train $ map (trainDataPoint microclusters) mfeatData
+  let clusters = runHMeans mfeatParams traind
+
+  let cLabels = partitionToLabelList clusters
+  let (hungarianPairs, hungarianScore) = runHungarian nClasses cLabels mfeatLabels
+  
+  return $ 100 * hungarianScore / (toSomething nDigits)
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+loop :: Int -> [BasicData DoubleVector] -> [Int] -> IO ()
+loop n mfeatData mfeatLabels = do
+  
+  d <- runWith n 10 2000 76 mfeatData mfeatLabels
+  t <- getCPUTime
+  putStrLn $ show n ++ " " ++ show d ++ " " ++ show t
+  if n + 200 == 2011
+    then loop 2000 mfeatData mfeatLabels
+  else if n + 100 > 2000
+    then return()
+  else loop (n + 200) mfeatData mfeatLabels
+  
+main = do
+  mfeatData <- readMFEAT 76
+  mfeatLabels <- readLabels
+
+  initializeTime
+
+  d <- runKWith 10 2000 76 mfeatData mfeatLabels
+  t <- getCPUTime
+  putStrLn $ show d ++ " " ++ show t
+  
+  loop 11 mfeatData mfeatLabels
+
+  d <- runKWith 10 2000 76 mfeatData mfeatLabels
+  t <- getCPUTime
+  putStrLn $ show d ++ " " ++ show t
+
+
+
+{-  let mfeatParams = Params nMicroclusters nClasses nDigits dimension (KMeansParams 1000)
 
   putStrLn $ "HMeans test script:"
 
   mfeatData <- readMFEAT
   randomGen <- getStdGen
   let microclusters = randomInitialize mfeatParams randomGen mfeatData
+--  let microclusters = initialize mfeatParams mfeatData
   
   putStrLn $ "Base partition selected:"
   putStrLn $ show microclusters
@@ -98,10 +156,13 @@ main = do
 
   mfeatLabels <- readLabels
   let cLabels = partitionToLabelList clusters
-  let (hungarianPairs, hungarianScore) = runHungarian dimension cLabels mfeatLabels
+  let (hungarianPairs, hungarianScore) = runHungarian nClasses cLabels mfeatLabels
   
---  putStrLn $ "Label list: "
---  putStrLn $ show $ zip mfeatLabels cLabels
+  putStrLn $ "Label list: "
+  putStrLn $ show $ zip mfeatLabels cLabels
+  
+  putStrLn $ "---------------------------------------------------------------------------------"
+
   putStrLn $ "Score:"
   putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething nDigits)) ++ "%)"
   
@@ -113,4 +174,4 @@ main = do
   putStrLn $ "Done" 
 
 
-
+-}

@@ -102,12 +102,12 @@ instance Vector (UV.Vector Double) where
 
 --------------------------------------------------------------------------------
 
-instance AbelianGroup (IMap.IntMap Double) where
+instance AbelianGroup (DoubleIntMap) where
     zero = IMap.empty
     plus x = IMap.unionWith (+) x
     neg = IMap.map (0 -)
 
-instance Vector (IMap.IntMap Double) where
+instance Vector (DoubleIntMap) where
     mapSq = IMap.map (^2)
     over a s = IMap.map (/ s) a
     distSq x = IMap.foldl' (+) 0 . IMap.map (^2) . IMap.unionWith (-) x

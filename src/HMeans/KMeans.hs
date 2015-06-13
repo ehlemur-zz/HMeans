@@ -21,10 +21,24 @@ import Data.List
 import Data.Clustering.Hierarchical
 
 
+
+
 runHMeans :: Vector v => Params -> Partition v -> Partition v
 runHMeans a b = case (hParams a) of
                   (HierarchicalParams _) -> runHierarchical a b
                   (KMeansParams       _) -> runKMeans a b
+
+
+
+partitionToLabelList :: Vector v => Partition v -> [Int]
+partitionToLabelList pcls = map snd $ sort $ concat $ map clusterToLabelList $ IMap.assocs $ getPartition pcls
+  where
+    clusterToLabelList (k, c) = flip zip (repeat k) $ ISet.toAscList $ pointsIn c
+
+
+
+
+
 
 runHierarchical :: Vector v => Params -> Partition v -> Partition v
 runHierarchical params pcls = Partition $ IMap.fromList $ zip [0..] $ map dendroToCluster $ getDendroList (nClusters params) dendro
@@ -47,35 +61,50 @@ runHierarchical params pcls = Partition $ IMap.fromList $ zip [0..] $ map dendro
     dendroToCluster (Branch _ a b) = (plus $!) (dendroToCluster a) (dendroToCluster b)
 
 
-partitionToLabelList :: Vector v => Partition v -> [Int]
-partitionToLabelList pcls = map snd $ sort $ concat $ map clusterToLabelList $ IMap.assocs $ getPartition pcls
-  where
-    clusterToLabelList (k, c) = flip zip (repeat k) $ ISet.toAscList $ pointsIn c
 
 
-runKMeansIO :: Vector v => Params -> IO [BasicData DoubleIntMap] -> IO (Partition v)
-runKMeansIO parameters inputSource = 
-  do let k = nClusters params
-     let nIters = maxIters $ hParams params
 
-     let reassign :: Vector v => IO [(Cluster v, Int)] -> IO (IMap.IntMap (Cluster v))
-         reassign aIO 
 
-     let kmeansStep :: Vector v => IMap.IntMap (Cluster v) -> IO IMap.IntMap (Cluster v)
-         kmeansStep p = inputSource >>= wrap (map toCluster) >>= wrap (map $ closestCluster p) >>= wrap (zip xs) >>= wrap reassign
+
+
+runKMeansIO :: Vector v => Params -> String -> (String -> IO [BasicData v]) -> IO (Partition v)
+runKMeansIO parameters inputFile inputSource = 
+  do let k = nClusters parameters
+     let nIters = maxIters $ hParams parameters
+
+     let kmeansStep :: Vector v => String -> (String -> IO [BasicData v]) -> IMap.IntMap (Cluster v) -> IO (IMap.IntMap (Cluster v))
+         kmeansStep inputFile inputSource p = 
+           do assignments <- inputSource inputFile
+                               >>= wrap (map toCluster) 
+                               >>= wrap (map $ closestCluster p) 
+              inputSource inputFile 
+                >>= wrap (map toCluster)
+                >>= wrap (zip assignments) 
+                >>= wrap (IMap.fromListWith plus)
      
-     let kmeans :: Vector v => Int -> IO IMap.IntMap (Cluster v) -> IO IMap.IntMap (Cluster v)
-         kmeans 0 pIO = pIO
-         kmeans n pIO = 
+     let kmeans :: Vector v => String -> (String -> IO [BasicData v]) -> Int -> IO (IMap.IntMap (Cluster v)) -> IO (IMap.IntMap (Cluster v))
+         kmeans inputFile inputSource 0 pIO = pIO
+         kmeans inputFile inputSource n pIO = 
            do p <- pIO
-              p' <- kmeansStep p
+              p' <- kmeansStep inputFile inputSource p
               if p == p' then pIO
-              else kmeans (n-1) (return p')
+              else kmeans inputFile inputSource (n-1) (return p')
            
 
-     let initial = inputSource >>= wrap (take k) >>= wrap (zip [0..]) >>= wrap (IMap.fromAscList)    
+     let initial = inputSource inputFile 
+                     >>= wrap (take k) 
+                     >>= wrap (map toCluster)
+                     >>= wrap (zip [0..]) 
+                     >>= wrap (IMap.fromAscList)    
+     
+     aoeu <- initial
+     putStrLn $ show aoeu
 
-     kmeans nIters initial
+     kmeans inputFile inputSource nIters initial >>= wrap Partition
+
+
+
+
 
 runKMeans :: Vector v => Params -> Partition v -> Partition v
 runKMeans params pcls = Partition $ kmeans nIters (IMap.elems _cls) initial
@@ -93,13 +122,8 @@ runKMeans params pcls = Partition $ kmeans nIters (IMap.elems _cls) initial
                        else kmeans (n-1) cls p'
                      
     kmeansStep :: Vector v => IMap.IntMap (Cluster v) -> [Cluster v] -> IMap.IntMap (Cluster v)
-    kmeansStep p xs = reassign IMap.empty $ zip xs $ map (closestCluster p) xs
+    kmeansStep p xs = IMap.fromListWith plus $ flip zip xs $ map (closestCluster p) xs
       
-    reassign :: Vector v => IMap.IntMap (Cluster v) -> [(Cluster v, Int)] -> IMap.IntMap (Cluster v)
-    reassign p [] = p
-    reassign p ((c, i):xs) = IMap.unionWith plus (IMap.singleton i c) $ reassign p xs
-
-
 {-partition :: (Vector v) => Params -> Partition v -> Partition v
 partition params _pcls = Partition $ partition' (nClusters params) _cls distTable
   where 
