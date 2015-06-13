@@ -100,18 +100,25 @@ runHungarian x y = hungarian m 10 10
 main = do 
   file <- BL.readFile "hcluster_input"
   file' <- BL.readFile "hcluster_input"
+  file'' <- BL.readFile "hcluster_input"
   label_file <- BL.readFile "hcluster_labels"
+  label_file' <- BL.readFile "hcluster_labels"
   randomGen <- getStdGen
 
-{-  let n = 1000
+  let n = 500
   let rawImages = take n $ fst $ readImages file
-  let rawImages' = take n $ fst $ readImages file
-  let labels = take n $ readLabels label_file -}
-  let (rawImages, n) = readImages file
+  let rawImages' = take n $ fst $ readImages file'
+  let rawImages'' = take n $ fst $ readImages file''
+  let labels = take n $ readLabels label_file 
+  let labels' = take n $ readLabels label_file'
+{-  let (rawImages, n) = readImages file
   let (rawImages', _) = readImages file'
+  let (rawImages'', _) = readImages file''
   let labels = readLabels label_file
+  let labels' = readLabels label_file'-}
 
-  let params = Params 100 10 n (28*28) (HierarchicalParams UPGMA)
+--  let params = Params 100 10 n (28*28) (HierarchicalParams UPGMA)
+  let params = Params 100 10 n (28*28) (KMeansParams 1000)
   let images = toBasicData rawImages
   let initialPartition = randomInitialize params randomGen images
 
@@ -119,7 +126,7 @@ main = do
   let images' = map (trainDataPoint initialPartition) $ toBasicData rawImages'
   let train1 = train images'
 
-  let clusters = runHierarchical params train1 
+  let clusters = runHMeans params train1 
   let clustersLabels = partitionToLabelList clusters
 
 --  let labels = [1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0]
@@ -129,7 +136,12 @@ main = do
   let hungarianMap = IMap.fromList hungarianPairs
 
   let mappedClustersLabels = map (hungarianMap IMap.!) clustersLabels
+ 
+  let params' = Params 500 10 n (28*28) (KMeansParams 1000)
+  let kmeansClusters = Partition $ IMap.fromList $ zip [0..] $ map toCluster $ toBasicData rawImages''
+  let kmeansResult = partitionToLabelList $ runHMeans params kmeansClusters
 
+  let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels'
 
   putStrLn $ "HMeans test script:"
   putStrLn $ "Base partition selected:"
@@ -144,4 +156,7 @@ main = do
   putStrLn $ "---------------------------------------------------------------------------------"
   putStrLn $ "Score:"
   putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toSomething n)) ++ "%)"
+  putStrLn $ "---------------------------------------------------------------------------------"
+  putStrLn $ "KMeans Score:"
+  putStrLn $ "\t" ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toSomething n)) ++ "%)"
   putStrLn $ "Done" 

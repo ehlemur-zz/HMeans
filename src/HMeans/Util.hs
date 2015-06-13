@@ -23,5 +23,8 @@ closestCluster p c = snd $ IMap.foldlWithKey' f (read "Infinity", undefined) $ I
                         then a
                         else (d', k)
 
-toSomething :: (Integral a, Num b) => a -> b
-toSomething = fromInteger . toInteger
+toNum :: (Integral a, Num b) => a -> b
+toNum = fromInteger . toInteger
+
+wrap :: Monad m => (a -> b) -> a -> m b
+wrap f a = return $ f a

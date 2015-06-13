@@ -105,7 +105,7 @@ main = do
   label_file' <- BL.readFile "hcluster_labels"
   randomGen <- getStdGen
 
-  let n = 1000
+  let n = 500
   let rawImages = take n $ fst $ readImages file
   let rawImages' = take n $ fst $ readImages file'
   let rawImages'' = take n $ fst $ readImages file''
@@ -118,7 +118,7 @@ main = do
   let labels' = readLabels label_file'-}
 
 --  let params = Params 100 10 n (28*28) (HierarchicalParams UPGMA)
-  let params = Params 500 10 n (28*28) (KMeansParams 1000)
+  let params = Params 100 10 n (28*28) (KMeansParams 1000)
   let images = toBasicData rawImages
   let initialPartition = randomInitialize params randomGen images
 
@@ -137,7 +137,7 @@ main = do
 
   let mappedClustersLabels = map (hungarianMap IMap.!) clustersLabels
  
-  let params' = Params 100 10 n (28*28) (KMeansParams 1000)
+  let params' = Params 500 10 n (28*28) (KMeansParams 1000)
   let kmeansClusters = Partition $ IMap.fromList $ zip [0..] $ map toCluster $ toBasicData rawImages''
   let kmeansResult = partitionToLabelList $ runHMeans params kmeansClusters
 

@@ -21,7 +21,7 @@ import System.Random.Shuffle
 randomInitialize :: (Vector v, Data d) => Params -> StdGen -> [d v] -> Partition v
 randomInitialize params gen0 = Partition . IMap.fromAscList . zip [1..] . rInitialize (generateRandom $ gen0) . map toCluster
   where
-    treshold = ((toSomething $ nMicroClusters params) :: Double) / ((toSomething $ nDataPoints params) :: Double) 
+    treshold = ((toNum $ nMicroClusters params) :: Double) / ((toNum $ nDataPoints params) :: Double) 
 
     rInitialize :: [Bool] -> [a] -> [a]
     rInitialize _ [] = []

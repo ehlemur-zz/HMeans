@@ -53,6 +53,30 @@ partitionToLabelList pcls = map snd $ sort $ concat $ map clusterToLabelList $ I
     clusterToLabelList (k, c) = flip zip (repeat k) $ ISet.toAscList $ pointsIn c
 
 
+runKMeansIO :: Vector v => Params -> IO [BasicData DoubleIntMap] -> IO (Partition v)
+runKMeansIO parameters inputSource = 
+  do let k = nClusters params
+     let nIters = maxIters $ hParams params
+
+     let reassign :: Vector v => IO [(Cluster v, Int)] -> IO (IMap.IntMap (Cluster v))
+         reassign aIO 
+
+     let kmeansStep :: Vector v => IMap.IntMap (Cluster v) -> IO IMap.IntMap (Cluster v)
+         kmeansStep p = inputSource >>= wrap (map toCluster) >>= wrap (map $ closestCluster p) >>= wrap (zip xs) >>= wrap reassign
+     
+     let kmeans :: Vector v => Int -> IO IMap.IntMap (Cluster v) -> IO IMap.IntMap (Cluster v)
+         kmeans 0 pIO = pIO
+         kmeans n pIO = 
+           do p <- pIO
+              p' <- kmeansStep p
+              if p == p' then pIO
+              else kmeans (n-1) (return p')
+           
+
+     let initial = inputSource >>= wrap (take k) >>= wrap (zip [0..]) >>= wrap (IMap.fromAscList)    
+
+     kmeans nIters initial
+
 runKMeans :: Vector v => Params -> Partition v -> Partition v
 runKMeans params pcls = Partition $ kmeans nIters (IMap.elems _cls) initial
   where

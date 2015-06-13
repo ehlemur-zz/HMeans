@@ -20,8 +20,8 @@ import Debug.Trace
 
 
 
-trainDataPoint :: (Vector v, Data d) => Partition v -> d v -> Partition v
-trainDataPoint base d = Partition $ IMap.singleton i c
+trainSingle :: (Vector v, Data d) => Partition v -> d v -> Partition v
+trainSingle base d = Partition $ IMap.singleton i c
   where 
     c = toCluster d
     i = closestCluster (getPartition base) c
