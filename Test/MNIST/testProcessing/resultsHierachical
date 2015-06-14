@@ -1,0 +1,12 @@
+Hierachical Score with 20 points:
+  9.0 points mislabeled (45.0%)
+  10.72 ms
+Hierachical Score with 220 points:
+  150.0 points mislabeled (68.18181818181819%)
+  632.2 ms
+Hierachical Score with 420 points:
+  295.0 points mislabeled (70.23809523809524%)
+  2.265 s
+Hierachical Score with 620 points:
+  489.0 points mislabeled (78.87096774193549%)
+  5.064 s

@@ -175,9 +175,9 @@ main = do
            else
              loopHMeans hParameters nMicro (nImages + 200)
 
-  let loopKMeans :: Int -> IO () 
-      loopKMeans nImages = 
-        do let params = Params undefined 10 nImages (28*28) (KMeansParams 1)
+  let loopKMeans :: HMeansParams -> Int -> IO () 
+      loopKMeans hParameters nImages = 
+        do let params = Params undefined 10 nImages (28*28) hParameters
            t        <- getTime
 
            labels   <- BL.readFile "mnist_labels"
@@ -199,27 +199,13 @@ main = do
            if nImages + 200 > 60000 then
              return ()
            else
-             loopKMeans (nImages + 200)
+             loopKMeans hParameters (nImages + 200)
 
   initializeTime
 
   loopHMeans (HierarchicalParams UPGMA) 100 20
-  loopHierarchical (HierarchicalParams UPGMA) 20
+--  loopHierarchical (HierarchicalParams UPGMA) 20
 
-  
+--  loopHMeans (KMeansParams 1000) 100 20
+--  loopKMeans (KMeansParams 1000) 20 
 
-  {-putStrLn $ "HMeans test script:"
-  putStrLn $ "Base partition selected:"
-  putStrLn $ show initialPartition
-  putStrLn $ "---------------------------------------------------------------------------------"
-  putStrLn $ "Resulting partition:"
-  putStrLn $ show train1
-  putStrLn $ "---------------------------------------------------------------------------------"
-  putStrLn $ "Clusters found:"
-  putStrLn $ show clusters
---  putStrLn $ show $ zip mappedClustersLabels labels
-  putStrLn $ "---------------------------------------------------------------------------------"
-  putStrLn $ "Score:"
-  putStrLn $ "\t" ++ show hungarianScore ++ " points mislabeled (" ++ (show $ 100 * hungarianScore / (toNum n)) ++ "%)"
-  putStrLn $ "---------------------------------------------------------------------------------"-}
-{-  putStrLn $ "Done" -}

@@ -1,0 +1,516 @@
+HMeans Score with 20 points:
+  9.0 points mislabeled (45.0%)
+  991.5 ms
+HMeans Score with 220 points:
+  150.0 points mislabeled (68.18181818181819%)
+  828.4 ms
+HMeans Score with 420 points:
+  322.0 points mislabeled (76.66666666666667%)
+  1.283 s
+HMeans Score with 620 points:
+  501.0 points mislabeled (80.80645161290323%)
+  1.971 s
+HMeans Score with 820 points:
+  621.0 points mislabeled (75.73170731707317%)
+  2.731 s
+HMeans Score with 1020 points:
+  747.0 points mislabeled (73.23529411764706%)
+  3.586 s
+HMeans Score with 1220 points:
+  1023.0 points mislabeled (83.85245901639344%)
+  4.247 s
+HMeans Score with 1420 points:
+  857.0 points mislabeled (60.352112676056336%)
+  4.626 s
+HMeans Score with 1620 points:
+  1118.0 points mislabeled (69.01234567901234%)
+  5.075 s
+HMeans Score with 1820 points:
+  1275.0 points mislabeled (70.05494505494505%)
+  5.655 s
+HMeans Score with 2020 points:
+  1148.0 points mislabeled (56.83168316831683%)
+  6.305 s
+HMeans Score with 2220 points:
+  1362.0 points mislabeled (61.351351351351354%)
+  8.418 s
+HMeans Score with 2420 points:
+  1354.0 points mislabeled (55.950413223140494%)
+  9.910 s
+HMeans Score with 2620 points:
+  1476.0 points mislabeled (56.33587786259542%)
+  10.45 s
+HMeans Score with 2820 points:
+  2081.0 points mislabeled (73.79432624113475%)
+  12.66 s
+HMeans Score with 3020 points:
+  1767.0 points mislabeled (58.50993377483444%)
+  12.59 s
+HMeans Score with 3220 points:
+  2073.0 points mislabeled (64.37888198757764%)
+  12.79 s
+HMeans Score with 3420 points:
+  1940.0 points mislabeled (56.72514619883041%)
+  12.26 s
+HMeans Score with 3620 points:
+  1996.0 points mislabeled (55.13812154696133%)
+  11.96 s
+HMeans Score with 3820 points:
+  1791.0 points mislabeled (46.8848167539267%)
+  13.11 s
+HMeans Score with 4020 points:
+  1808.0 points mislabeled (44.975124378109456%)
+  13.70 s
+HMeans Score with 4220 points:
+  2059.0 points mislabeled (48.791469194312796%)
+  14.92 s
+HMeans Score with 4420 points:
+  2115.0 points mislabeled (47.85067873303167%)
+  15.81 s
+HMeans Score with 4620 points:
+  2792.0 points mislabeled (60.43290043290043%)
+  16.12 s
+HMeans Score with 4820 points:
+  2662.0 points mislabeled (55.22821576763486%)
+  17.41 s
+HMeans Score with 5020 points:
+  2673.0 points mislabeled (53.24701195219124%)
+  17.69 s
+HMeans Score with 5220 points:
+  2601.0 points mislabeled (49.827586206896555%)
+  17.79 s
+HMeans Score with 5420 points:
+  2977.0 points mislabeled (54.92619926199262%)
+  18.40 s
+HMeans Score with 5620 points:
+  3133.0 points mislabeled (55.74733096085409%)
+  18.72 s
+HMeans Score with 5820 points:
+  3034.0 points mislabeled (52.13058419243986%)
+  20.30 s
+HMeans Score with 6020 points:
+  3031.0 points mislabeled (50.348837209302324%)
+  20.91 s
+HMeans Score with 6220 points:
+  3633.0 points mislabeled (58.40836012861736%)
+  23.19 s
+HMeans Score with 6420 points:
+  3529.0 points mislabeled (54.96884735202492%)
+  23.93 s
+HMeans Score with 6620 points:
+  3612.0 points mislabeled (54.561933534743204%)
+  25.37 s
+HMeans Score with 6820 points:
+  4209.0 points mislabeled (61.71554252199414%)
+  26.56 s
+HMeans Score with 7020 points:
+  3515.0 points mislabeled (50.07122507122507%)
+  26.88 s
+HMeans Score with 7220 points:
+  3490.0 points mislabeled (48.337950138504155%)
+  27.40 s
+HMeans Score with 7420 points:
+  3888.0 points mislabeled (52.3989218328841%)
+  28.14 s
+HMeans Score with 7620 points:
+  4011.0 points mislabeled (52.63779527559055%)
+  28.83 s
+HMeans Score with 7820 points:
+  4370.0 points mislabeled (55.88235294117647%)
+  29.83 s
+HMeans Score with 8020 points:
+  4209.0 points mislabeled (52.48129675810474%)
+  30.24 s
+HMeans Score with 8220 points:
+  4534.0 points mislabeled (55.15815085158151%)
+  30.25 s
+HMeans Score with 8420 points:
+  5422.0 points mislabeled (64.39429928741093%)
+  31.48 s
+HMeans Score with 8620 points:
+  4298.0 points mislabeled (49.86078886310905%)
+  32.49 s
+HMeans Score with 8820 points:
+  5716.0 points mislabeled (64.80725623582767%)
+  32.96 s
+HMeans Score with 9020 points:
+  5726.0 points mislabeled (63.48115299334812%)
+  33.35 s
+HMeans Score with 9220 points:
+  4802.0 points mislabeled (52.0824295010846%)
+  33.52 s
+HMeans Score with 9420 points:
+  5204.0 points mislabeled (55.24416135881104%)
+  33.70 s
+HMeans Score with 9620 points:
+  5921.0 points mislabeled (61.54885654885655%)
+  35.27 s
+HMeans Score with 9820 points:
+  5051.0 points mislabeled (51.435845213849284%)
+  35.87 s
+HMeans Score with 10020 points:
+  6358.0 points mislabeled (63.45309381237525%)
+  37.04 s
+HMeans Score with 10220 points:
+  6479.0 points mislabeled (63.39530332681018%)
+  37.54 s
+HMeans Score with 10420 points:
+  6436.0 points mislabeled (61.7658349328215%)
+  38.14 s
+HMeans Score with 10620 points:
+  5987.0 points mislabeled (56.37476459510358%)
+  38.17 s
+HMeans Score with 10820 points:
+  6112.0 points mislabeled (56.48798521256931%)
+  38.36 s
+HMeans Score with 11020 points:
+  7534.0 points mislabeled (68.36660617059891%)
+  39.47 s
+HMeans Score with 11220 points:
+  7599.0 points mislabeled (67.72727272727273%)
+  40.32 s
+HMeans Score with 11420 points:
+  7000.0 points mislabeled (61.29597197898424%)
+  40.57 s
+HMeans Score with 11620 points:
+  7242.0 points mislabeled (62.32358003442341%)
+  41.43 s
+HMeans Score with 11820 points:
+  7458.0 points mislabeled (63.09644670050761%)
+  42.11 s
+HMeans Score with 12020 points:
+  6964.0 points mislabeled (57.93677204658902%)
+  44.32 s
+HMeans Score with 12220 points:
+  7161.0 points mislabeled (58.60065466448445%)
+  45.40 s
+HMeans Score with 12420 points:
+  6981.0 points mislabeled (56.207729468599034%)
+  46.43 s
+HMeans Score with 12620 points:
+  7380.0 points mislabeled (58.478605388272584%)
+  48.12 s
+HMeans Score with 12820 points:
+  7504.0 points mislabeled (58.53354134165367%)
+  47.92 s
+HMeans Score with 13020 points:
+  7503.0 points mislabeled (57.62672811059908%)
+  49.10 s
+HMeans Score with 13220 points:
+  7086.0 points mislabeled (53.60060514372164%)
+  50.18 s
+HMeans Score with 13420 points:
+  7219.0 points mislabeled (53.79284649776453%)
+  49.81 s
+HMeans Score with 13620 points:
+  6857.0 points mislabeled (50.34508076358296%)
+  50.17 s
+HMeans Score with 13820 points:
+  7459.0 points mislabeled (53.97250361794501%)
+  51.01 s
+HMeans Score with 14020 points:
+  8664.0 points mislabeled (61.79743223965763%)
+  51.61 s
+HMeans Score with 14220 points:
+  9191.0 points mislabeled (64.63431786216596%)
+  52.99 s
+HMeans Score with 14420 points:
+  8806.0 points mislabeled (61.067961165048544%)
+  54.01 s
+HMeans Score with 14620 points:
+  8888.0 points mislabeled (60.79343365253078%)
+  54.13 s
+HMeans Score with 14820 points:
+  8718.0 points mislabeled (58.825910931174086%)
+  55.52 s
+HMeans Score with 15020 points:
+  7895.0 points mislabeled (52.563249001331556%)
+  56.53 s
+HMeans Score with 15220 points:
+  8097.0 points mislabeled (53.19973718791064%)
+  56.51 s
+HMeans Score with 15420 points:
+  8583.0 points mislabeled (55.66147859922179%)
+  55.53 s
+HMeans Score with 15620 points:
+  9293.0 points mislabeled (59.49423815620999%)
+  56.02 s
+HMeans Score with 15820 points:
+  9360.0 points mislabeled (59.16561314791403%)
+  56.20 s
+HMeans Score with 16020 points:
+  9681.0 points mislabeled (60.43071161048689%)
+  56.93 s
+HMeans Score with 16220 points:
+  9715.0 points mislabeled (59.895191122071516%)
+  58.10 s
+HMeans Score with 16420 points:
+  9850.0 points mislabeled (59.987819732034104%)
+  58.82 s
+HMeans Score with 16620 points:
+  10011.0 points mislabeled (60.234657039711195%)
+  58.85 s
+HMeans Score with 16820 points:
+  10233.0 points mislabeled (60.838287752675384%)
+  59.42 s
+HMeans Score with 17020 points:
+  10358.0 points mislabeled (60.85781433607521%)
+  59.89 s
+HMeans Score with 17220 points:
+  10347.0 points mislabeled (60.08710801393728%)
+  63.03 s
+HMeans Score with 17420 points:
+  10200.0 points mislabeled (58.553386911595865%)
+  62.69 s
+HMeans Score with 17620 points:
+  9705.0 points mislabeled (55.079455164585696%)
+  62.47 s
+HMeans Score with 17820 points:
+  9839.0 points mislabeled (55.21324354657688%)
+  62.97 s
+HMeans Score with 18020 points:
+  9958.0 points mislabeled (55.26082130965594%)
+  63.85 s
+HMeans Score with 18220 points:
+  10141.0 points mislabeled (55.65861690450055%)
+  63.87 s
+HMeans Score with 18420 points:
+  9979.0 points mislabeled (54.17480998914224%)
+  64.10 s
+HMeans Score with 18620 points:
+  10737.0 points mislabeled (57.663802363050486%)
+  66.35 s
+HMeans Score with 18820 points:
+  11018.0 points mislabeled (58.54410201912859%)
+  67.00 s
+HMeans Score with 19020 points:
+  9083.0 points mislabeled (47.75499474237645%)
+  67.33 s
+HMeans Score with 19220 points:
+  9854.0 points mislabeled (51.26951092611863%)
+  68.02 s
+HMeans Score with 19420 points:
+  9992.0 points mislabeled (51.452111225540676%)
+  68.09 s
+HMeans Score with 19620 points:
+  10891.0 points mislabeled (55.50968399592253%)
+  67.18 s
+HMeans Score with 19820 points:
+  11669.0 points mislabeled (58.87487386478305%)
+  67.17 s
+HMeans Score with 20020 points:
+  10117.0 points mislabeled (50.53446553446553%)
+  68.65 s
+HMeans Score with 20220 points:
+  10227.0 points mislabeled (50.5786350148368%)
+  69.11 s
+HMeans Score with 20420 points:
+  11163.0 points mislabeled (54.66699314397649%)
+  70.08 s
+HMeans Score with 20620 points:
+  11873.0 points mislabeled (57.580019398642094%)
+  70.00 s
+HMeans Score with 20820 points:
+  11572.0 points mislabeled (55.58117195004803%)
+  70.36 s
+HMeans Score with 21020 points:
+  11225.0 points mislabeled (53.40152235965747%)
+  71.10 s
+HMeans Score with 21220 points:
+  11069.0 points mislabeled (52.16305372290292%)
+  71.73 s
+HMeans Score with 21420 points:
+  11066.0 points mislabeled (51.66199813258637%)
+  71.83 s
+HMeans Score with 21620 points:
+  11230.0 points mislabeled (51.942645698427384%)
+  71.76 s
+HMeans Score with 21820 points:
+  11615.0 points mislabeled (53.23098075160404%)
+  72.39 s
+HMeans Score with 22020 points:
+  11724.0 points mislabeled (53.2425068119891%)
+  74.10 s
+HMeans Score with 22220 points:
+  11293.0 points mislabeled (50.823582358235825%)
+  74.92 s
+HMeans Score with 22420 points:
+  11414.0 points mislabeled (50.909901873327385%)
+  74.57 s
+HMeans Score with 22620 points:
+  11703.0 points mislabeled (51.737400530503976%)
+  75.94 s
+HMeans Score with 22820 points:
+  11794.0 points mislabeled (51.68273444347064%)
+  76.39 s
+HMeans Score with 23020 points:
+  12246.0 points mislabeled (53.19721980886186%)
+  77.37 s
+HMeans Score with 23220 points:
+  12352.0 points mislabeled (53.19552110249785%)
+  78.30 s
+HMeans Score with 23420 points:
+  13270.0 points mislabeled (56.66097352690009%)
+  78.92 s
+HMeans Score with 23620 points:
+  12647.0 points mislabeled (53.54360711261643%)
+  80.13 s
+HMeans Score with 23820 points:
+  13473.0 points mislabeled (56.5617128463476%)
+  81.46 s
+HMeans Score with 24020 points:
+  12067.0 points mislabeled (50.23730224812656%)
+  82.16 s
+HMeans Score with 24220 points:
+  12971.0 points mislabeled (53.554913294797686%)
+  83.89 s
+HMeans Score with 24420 points:
+  12203.0 points mislabeled (49.97133497133497%)
+  84.78 s
+HMeans Score with 24620 points:
+  13195.0 points mislabeled (53.59463850528026%)
+  84.19 s
+HMeans Score with 24820 points:
+  12456.0 points mislabeled (50.185334407735695%)
+  83.57 s
+HMeans Score with 25020 points:
+  13164.0 points mislabeled (52.61390887290168%)
+  82.83 s
+HMeans Score with 25220 points:
+  13248.0 points mislabeled (52.52973830293418%)
+  83.32 s
+HMeans Score with 25420 points:
+  13967.0 points mislabeled (54.94492525570417%)
+  85.78 s
+HMeans Score with 25620 points:
+  14566.0 points mislabeled (56.85402029664325%)
+  85.71 s
+HMeans Score with 25820 points:
+  13629.0 points mislabeled (52.78466305189775%)
+  86.50 s
+HMeans Score with 26020 points:
+  13981.0 points mislabeled (53.73174481168332%)
+  87.38 s
+HMeans Score with 26220 points:
+  15049.0 points mislabeled (57.395118230358506%)
+  86.79 s
+HMeans Score with 26420 points:
+  14930.0 points mislabeled (56.510219530658595%)
+  87.29 s
+HMeans Score with 26620 points:
+  15063.0 points mislabeled (56.58527422990233%)
+  89.01 s
+HMeans Score with 26820 points:
+  15176.0 points mislabeled (56.58463832960477%)
+  90.31 s
+HMeans Score with 27020 points:
+  15293.0 points mislabeled (56.59881569207994%)
+  90.77 s
+HMeans Score with 27220 points:
+  15503.0 points mislabeled (56.954445260837616%)
+  90.78 s
+HMeans Score with 27420 points:
+  16838.0 points mislabeled (61.40773158278629%)
+  92.18 s
+HMeans Score with 27620 points:
+  13650.0 points mislabeled (49.42070963070239%)
+  92.17 s
+HMeans Score with 27820 points:
+  13183.0 points mislabeled (47.386772106398276%)
+  93.58 s
+HMeans Score with 28020 points:
+  13295.0 points mislabeled (47.44825124910778%)
+  93.00 s
+HMeans Score with 28220 points:
+  13384.0 points mislabeled (47.427356484762576%)
+  93.63 s
+HMeans Score with 28420 points:
+  15007.0 points mislabeled (52.80436312456017%)
+  93.61 s
+HMeans Score with 28620 points:
+  14162.0 points mislabeled (49.48287910552062%)
+  94.36 s
+HMeans Score with 28820 points:
+  17810.0 points mislabeled (61.79736294240111%)
+  91.90 s
+HMeans Score with 29020 points:
+  17783.0 points mislabeled (61.27842866988284%)
+  92.01 s
+HMeans Score with 29220 points:
+  14909.0 points mislabeled (51.02327173169062%)
+  94.25 s
+HMeans Score with 29420 points:
+  14995.0 points mislabeled (50.968728755948334%)
+  95.00 s
+HMeans Score with 29620 points:
+  15109.0 points mislabeled (51.00945307224848%)
+  95.73 s
+HMeans Score with 29820 points:
+  18632.0 points mislabeled (62.481556002682765%)
+  96.18 s
+HMeans Score with 30020 points:
+  17986.0 points mislabeled (59.91339107261825%)
+  96.71 s
+HMeans Score with 30220 points:
+  17650.0 points mislabeled (58.40502978160159%)
+  96.37 s
+HMeans Score with 30420 points:
+  17853.0 points mislabeled (58.68836291913215%)
+  97.00 s
+HMeans Score with 30620 points:
+  17966.0 points mislabeled (58.674069235793596%)
+  97.53 s
+HMeans Score with 30820 points:
+  15752.0 points mislabeled (51.109669046073975%)
+  98.73 s
+HMeans Score with 31020 points:
+  15426.0 points mislabeled (49.72920696324952%)
+  98.09 s
+HMeans Score with 31220 points:
+  15355.0 points mislabeled (49.18321588725176%)
+  99.80 s
+HMeans Score with 31420 points:
+  15425.0 points mislabeled (49.09293443666454%)
+  100.5 s
+HMeans Score with 31620 points:
+  16135.0 points mislabeled (51.027830487033526%)
+  100.7 s
+HMeans Score with 31820 points:
+  15043.0 points mislabeled (47.27529855436832%)
+  101.5 s
+HMeans Score with 32020 points:
+  15234.0 points mislabeled (47.57651467832605%)
+  99.75 s
+HMeans Score with 32220 points:
+  15790.0 points mislabeled (49.006828057107384%)
+  101.1 s
+HMeans Score with 32420 points:
+  15892.0 points mislabeled (49.01912399753239%)
+  101.8 s
+HMeans Score with 32620 points:
+  16029.0 points mislabeled (49.13856529736358%)
+  103.7 s
+HMeans Score with 32820 points:
+  15478.0 points mislabeled (47.16026812918952%)
+  104.0 s
+HMeans Score with 33020 points:
+  15572.0 points mislabeled (47.15929739551787%)
+  104.7 s
+HMeans Score with 33220 points:
+  15660.0 points mislabeled (47.14027694160144%)
+  105.4 s
+HMeans Score with 33420 points:
+  15974.0 points mislabeled (47.79772591262717%)
+  107.3 s
+HMeans Score with 33620 points:
+  16064.0 points mislabeled (47.78108268887567%)
+  108.4 s
+HMeans Score with 33820 points:
+  16197.0 points mislabeled (47.89178001182732%)
+  107.7 s
+HMeans Score with 34020 points:
+  16473.0 points mislabeled (48.42151675485009%)
+  106.0 s
+HMeans Score with 34220 points:
+  16154.0 points mislabeled (47.20631209818819%)
+  106.7 s

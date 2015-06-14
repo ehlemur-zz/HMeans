@@ -1,0 +1,93 @@
+Hierachical Score with 20 points:
+  9.0 points mislabeled (45.0%)
+  243.8 ms
+Hierachical Score with 220 points:
+  150.0 points mislabeled (68.18181818181819%)
+  664.2 ms
+Hierachical Score with 420 points:
+  295.0 points mislabeled (70.23809523809524%)
+  2.385 s
+Hierachical Score with 620 points:
+  489.0 points mislabeled (78.87096774193549%)
+  5.307 s
+Hierachical Score with 820 points:
+  637.0 points mislabeled (77.6829268292683%)
+  10.61 s
+Hierachical Score with 1020 points:
+  749.0 points mislabeled (73.43137254901961%)
+  18.99 s
+Hierachical Score with 1220 points:
+  920.0 points mislabeled (75.40983606557377%)
+  28.00 s
+Hierachical Score with 1420 points:
+  1067.0 points mislabeled (75.14084507042253%)
+  35.08 s
+Hierachical Score with 1620 points:
+  1250.0 points mislabeled (77.1604938271605%)
+  45.77 s
+Hierachical Score with 1820 points:
+  1555.0 points mislabeled (85.43956043956044%)
+  59.18 s
+Hierachical Score with 2020 points:
+  1615.0 points mislabeled (79.95049504950495%)
+  75.22 s
+Hierachical Score with 2220 points:
+  1768.0 points mislabeled (79.63963963963964%)
+  93.09 s
+Hierachical Score with 2420 points:
+  1866.0 points mislabeled (77.10743801652893%)
+  114.2 s
+Hierachical Score with 2620 points:
+  2008.0 points mislabeled (76.6412213740458%)
+  137.7 s
+Hierachical Score with 2820 points:
+  2104.0 points mislabeled (74.60992907801419%)
+  162.9 s
+Hierachical Score with 3020 points:
+  2174.0 points mislabeled (71.98675496688742%)
+  190.8 s
+Hierachical Score with 3220 points:
+  2323.0 points mislabeled (72.14285714285714%)
+  221.3 s
+Hierachical Score with 3420 points:
+  2718.0 points mislabeled (79.47368421052632%)
+  255.9 s
+Hierachical Score with 3620 points:
+  2821.0 points mislabeled (77.92817679558011%)
+  304.8 s
+Hierachical Score with 3820 points:
+  2917.0 points mislabeled (76.36125654450262%)
+  348.3 s
+Hierachical Score with 4020 points:
+  2988.0 points mislabeled (74.32835820895522%)
+  392.2 s
+Hierachical Score with 4220 points:
+  3321.0 points mislabeled (78.69668246445498%)
+  442.6 s
+Hierachical Score with 4420 points:
+  3364.0 points mislabeled (76.10859728506787%)
+  494.0 s
+Hierachical Score with 4620 points:
+  3583.0 points mislabeled (77.55411255411255%)
+  550.4 s
+Hierachical Score with 4820 points:
+  3472.0 points mislabeled (72.03319502074689%)
+  613.8 s
+Hierachical Score with 5020 points:
+  3827.0 points mislabeled (76.23505976095618%)
+  680.9 s
+Hierachical Score with 5220 points:
+  3758.0 points mislabeled (71.99233716475096%)
+  750.3 s
+Hierachical Score with 5420 points:
+  4266.0 points mislabeled (78.70848708487085%)
+  826.3 s
+Hierachical Score with 5620 points:
+  4304.0 points mislabeled (76.58362989323844%)
+  906.3 s
+Hierachical Score with 5820 points:
+  4473.0 points mislabeled (76.85567010309278%)
+  997.2 s
+Hierachical Score with 6020 points:
+  4725.0 points mislabeled (78.48837209302326%)
+  1082 s

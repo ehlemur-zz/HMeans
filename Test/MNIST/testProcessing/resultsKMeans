@@ -1,0 +1,153 @@
+KMeans Score with 20 points:
+  11.0 points mislabeled (55.0%)
+  35.07 ms
+KMeans Score with 220 points:
+  113.0 points mislabeled (51.36363636363637%)
+  2.261 s
+KMeans Score with 420 points:
+  233.0 points mislabeled (55.476190476190474%)
+  4.441 s
+KMeans Score with 620 points:
+  391.0 points mislabeled (63.064516129032256%)
+  9.440 s
+KMeans Score with 820 points:
+  507.0 points mislabeled (61.829268292682926%)
+  22.76 s
+KMeans Score with 1020 points:
+  615.0 points mislabeled (60.294117647058826%)
+  19.48 s
+KMeans Score with 1220 points:
+  751.0 points mislabeled (61.557377049180324%)
+  20.62 s
+KMeans Score with 1420 points:
+  859.0 points mislabeled (60.49295774647887%)
+  29.24 s
+KMeans Score with 1620 points:
+  980.0 points mislabeled (60.49382716049383%)
+  39.06 s
+KMeans Score with 1820 points:
+  1051.0 points mislabeled (57.747252747252745%)
+  94.08 s
+KMeans Score with 2020 points:
+  1155.0 points mislabeled (57.17821782178218%)
+  74.41 s
+KMeans Score with 2220 points:
+  1292.0 points mislabeled (58.1981981981982%)
+  56.35 s
+KMeans Score with 2420 points:
+  1464.0 points mislabeled (60.49586776859504%)
+  61.61 s
+KMeans Score with 2620 points:
+  1585.0 points mislabeled (60.49618320610687%)
+  57.55 s
+KMeans Score with 2820 points:
+  1695.0 points mislabeled (60.1063829787234%)
+  52.38 s
+KMeans Score with 3020 points:
+  1837.0 points mislabeled (60.82781456953642%)
+  102.0 s
+KMeans Score with 3220 points:
+  1907.0 points mislabeled (59.22360248447205%)
+  100.7 s
+KMeans Score with 3420 points:
+  2022.0 points mislabeled (59.12280701754386%)
+  134.9 s
+KMeans Score with 3620 points:
+  2184.0 points mislabeled (60.331491712707184%)
+  95.94 s
+KMeans Score with 3820 points:
+  2337.0 points mislabeled (61.17801047120419%)
+  186.3 s
+KMeans Score with 4020 points:
+  2474.0 points mislabeled (61.54228855721393%)
+  263.7 s
+KMeans Score with 4220 points:
+  2598.0 points mislabeled (61.56398104265403%)
+  228.2 s
+KMeans Score with 4420 points:
+  2627.0 points mislabeled (59.43438914027149%)
+  183.3 s
+KMeans Score with 4620 points:
+  2733.0 points mislabeled (59.15584415584416%)
+  170.0 s
+KMeans Score with 4820 points:
+  2943.0 points mislabeled (61.058091286307054%)
+  159.3 s
+KMeans Score with 5020 points:
+  3052.0 points mislabeled (60.79681274900398%)
+  286.0 s
+KMeans Score with 5220 points:
+  3156.0 points mislabeled (60.45977011494253%)
+  148.0 s
+KMeans Score with 5420 points:
+  3223.0 points mislabeled (59.464944649446494%)
+  224.1 s
+KMeans Score with 5620 points:
+  3344.0 points mislabeled (59.50177935943061%)
+  219.9 s
+KMeans Score with 5820 points:
+  3479.0 points mislabeled (59.776632302405496%)
+  213.0 s
+KMeans Score with 6020 points:
+  3606.0 points mislabeled (59.90033222591362%)
+  265.0 s
+KMeans Score with 6220 points:
+  3707.0 points mislabeled (59.59807073954984%)
+  371.0 s
+KMeans Score with 6420 points:
+  3813.0 points mislabeled (59.39252336448598%)
+  475.4 s
+KMeans Score with 6620 points:
+  3999.0 points mislabeled (60.40785498489426%)
+  269.3 s
+KMeans Score with 6820 points:
+  4093.0 points mislabeled (60.01466275659824%)
+  235.0 s
+KMeans Score with 7020 points:
+  4207.0 points mislabeled (59.92877492877493%)
+  233.3 s
+KMeans Score with 7220 points:
+  4320.0 points mislabeled (59.83379501385041%)
+  206.8 s
+KMeans Score with 7420 points:
+  4425.0 points mislabeled (59.63611859838275%)
+  238.6 s
+KMeans Score with 7620 points:
+  4596.0 points mislabeled (60.31496062992126%)
+  254.1 s
+KMeans Score with 7820 points:
+  4733.0 points mislabeled (60.52429667519181%)
+  299.8 s
+KMeans Score with 8020 points:
+  4830.0 points mislabeled (60.224438902743145%)
+  268.9 s
+KMeans Score with 8220 points:
+  4936.0 points mislabeled (60.04866180048662%)
+  235.3 s
+KMeans Score with 8420 points:
+  4952.0 points mislabeled (58.812351543942995%)
+  394.9 s
+KMeans Score with 8620 points:
+  5185.0 points mislabeled (60.150812064965194%)
+  267.1 s
+KMeans Score with 8820 points:
+  5298.0 points mislabeled (60.06802721088435%)
+  306.0 s
+KMeans Score with 9020 points:
+  5274.0 points mislabeled (58.470066518847005%)
+  640.6 s
+KMeans Score with 9220 points:
+  5542.0 points mislabeled (60.108459869848154%)
+  286.9 s
+KMeans Score with 9420 points:
+  5647.0 points mislabeled (59.94692144373673%)
+  511.2 s
+KMeans Score with 9620 points:
+  5783.0 points mislabeled (60.11434511434511%)
+  345.7 s
+KMeans Score with 9820 points:
+  5898.0 points mislabeled (60.06109979633401%)
+  366.6 s
+KMeans Score with 10020 points:
+  5994.0 points mislabeled (59.82035928143713%)
+  324.8 s
