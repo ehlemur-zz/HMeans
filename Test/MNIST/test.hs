@@ -103,31 +103,38 @@ main = do
   let loopHierarchical :: HMeansParams -> Int -> IO () 
       loopHierarchical hParameters nImages = 
         do let params = Params undefined 10 nImages (28*28) hParameters
-           t        <- getTime
-           
-           labels   <- BL.readFile "mnist_labels"
-                            >>= wrap readLabels
-                            >>= wrap (take nImages)
-           
-           clusters <- BL.readFile "mnist_input" 
-                            >>= wrap (fst . readImages) 
-                            >>= wrap (take nImages) 
-                            >>= wrap toBasicData
-                            >>= wrap (map $ toCluster)
-                            >>= wrap (zip [0..])
-                            >>= wrap (Partition . IMap.fromList)
-                            >>= wrap (runHierarchical params)           
+           let nRuns = 10
 
-           evaluate clusters
-                        
-           t'       <- getTime
+           let runMany :: Int -> (Double, Double) -> IO (Double, Double)
+               runMany 0 p      = return $ p
+               runMany n (a, b) = 
+                 do t        <- getTime
 
-           let kmeansResult = partitionToLabelList clusters
-           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
+                    labels   <- BL.readFile "mnist_labels"
+                                  >>= wrap readLabels
+                                  >>= wrap (take nImages)
+               
+                    clusters <- BL.readFile "mnist_input" 
+                                  >>= wrap (fst . readImages) 
+                                  >>= wrap (take nImages) 
+                                  >>= wrap toBasicData
+                                  >>= wrap (map $ toCluster)
+                                  >>= wrap (zip [0..])
+                                  >>= wrap (Partition . IMap.fromList)
+                                  >>= wrap (runHierarchical params)           
 
-           putStrLn $ "Hierachical Score with " ++ show nImages ++ " points:"
-           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
-           putStrLn $ "  " ++ (secs $ t' - t)
+                    evaluate clusters
+                            
+                    t'       <- getTime
+
+                    let kmeansResult = partitionToLabelList clusters
+                    let (_, hungarianScore) = runHungarian kmeansResult labels
+
+                    runMany (n-1) (a + t' - t, b + 100 * hungarianScore / (toNum nImages))
+
+           (t, p) <- runMany nRuns (0, 0)
+    
+           putStrLn $ show nImages ++ " " ++ (secs $ t / (toNum nRuns)) ++ " " ++ (show $ p / (toNum nRuns)) 
      
            if nImages + 200 > 60000 then
              return ()
@@ -137,38 +144,45 @@ main = do
   let loopHMeans :: HMeansParams -> Int -> Int -> IO () 
       loopHMeans hParameters nMicro nImages = 
         do let params = Params nMicro 10 nImages (28*28) hParameters
-           t             <- getTime
+           let nRuns = 10
+
+           let runMany :: Int -> (Double, Double) -> IO (Double, Double)
+               runMany 0 p      = return p
+               runMany n (a, b) = 
+                 do t             <- getTime
            
-           labels        <- BL.readFile "mnist_labels"
-                            >>= wrap readLabels
-                            >>= wrap (take nImages)
-           
-           randomSeed    <- getStdGen
+                    labels        <- BL.readFile "mnist_labels"
+                                       >>= wrap readLabels
+                                       >>= wrap (take nImages)
+                       
+                    randomSeed    <- getStdGen
 
-           microclusters <- BL.readFile "mnist_input" 
-                            >>= wrap (fst . readImages) 
-                            >>= wrap (take nImages) 
-                            >>= wrap toBasicData
-                            >>= wrap (randomInitialize params randomSeed)
-           
-           clusters      <- BL.readFile "mnist_input"
-                            >>= wrap (fst . readImages) 
-                            >>= wrap (take nImages) 
-                            >>= wrap toBasicData
-                            >>= wrap (map $ trainSingle microclusters)
-                            >>= wrap train
-                            >>= wrap (runHMeans params)
+                    microclusters <- BL.readFile "mnist_input" 
+                                       >>= wrap (fst . readImages) 
+                                       >>= wrap (take nImages) 
+                                       >>= wrap toBasicData
+                                       >>= wrap (randomInitialize params randomSeed)
+                      
+                    clusters      <- BL.readFile "mnist_input"
+                                       >>= wrap (fst . readImages) 
+                                       >>= wrap (take nImages) 
+                                       >>= wrap toBasicData
+                                       >>= wrap (map $ trainSingle microclusters)
+                                       >>= wrap train
+                                       >>= wrap (runHMeans params)
 
-           evaluate clusters
-                        
-           t'            <- getTime
+                    evaluate clusters
+                                    
+                    t'            <- getTime
 
-           let kmeansResult = partitionToLabelList clusters
-           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
+                    let kmeansResult = partitionToLabelList clusters
+                    let (_, hungarianScore) = runHungarian kmeansResult labels
 
-           putStrLn $ "HMeans Score with " ++ show nImages ++ " points:"
-           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
-           putStrLn $ "  " ++ (secs $ t' - t)
+                    runMany (n - 1) (a + t' - t, b + 100 * hungarianScore / (toNum nImages))
+
+           (t, p) <- runMany nRuns (0, 0)
+
+           putStrLn $ show nImages ++ " " ++ (secs $ t / (toNum nRuns)) ++ " " ++ (show $ p / (toNum nRuns))
      
            if nImages + 200 > 60000 then
              return ()
@@ -177,24 +191,35 @@ main = do
 
   let loopKMeans :: HMeansParams -> Int -> IO () 
       loopKMeans hParameters nImages = 
-        do let params = Params undefined 10 nImages (28*28) hParameters
-           t        <- getTime
+        do let params = Params 20 10 nImages (28*28) hParameters
+           let nRuns = 10
 
-           labels   <- BL.readFile "mnist_labels"
-                            >>= wrap readLabels
-                            >>= wrap (take nImages)
+           let runMany :: Int -> (Double, Double) -> IO (Double, Double)
+               runMany 0 p      = return p
+               runMany n (a, b) = 
+                 do t        <- getTime
 
-           clusters <- runKMeansIO params "mnist_input" 
-                       (\x -> (BL.readFile x >>= wrap (fst . readImages) >>= wrap (take nImages) >>= wrap toBasicData))
-              
-           t'       <- getTime
+                    labels   <- BL.readFile "mnist_labels"
+                                  >>= wrap readLabels
+                                  >>= wrap (take nImages)
 
-           let kmeansResult = partitionToLabelList clusters
-           let (hungarianPairs', hungarianScore') = runHungarian kmeansResult labels
+                    clusters <- runKMeansIO params "mnist_input" 
+                                  (\x -> (BL.readFile x 
+                                            >>= wrap (fst . readImages) 
+                                            >>= wrap (take nImages) 
+                                            >>= wrap toBasicData))
+                    evaluate clusters
+
+                    t'       <- getTime
+
+                    let kmeansResult = partitionToLabelList clusters
+                    let (_, hungarianScore) = runHungarian kmeansResult labels
+
+                    runMany (n - 1) (a + t' - t, b + 100 * hungarianScore / (toNum nImages))
            
-           putStrLn $ "KMeans Score with " ++ show nImages ++ " points:"
-           putStrLn $ "  " ++ show hungarianScore' ++ " points mislabeled (" ++ (show $ 100 * hungarianScore' / (toNum nImages)) ++ "%)"
-           putStrLn $ "  " ++ (secs $ t' - t)
+           (t, p) <- runMany nRuns (0, 0)
+
+           putStrLn $ show nImages ++ " " ++ (secs $ t / (toNum nRuns)) ++ " " ++ (show $ p / (toNum nRuns))
      
            if nImages + 200 > 60000 then
              return ()
@@ -203,8 +228,8 @@ main = do
 
   initializeTime
 
-  loopHMeans (HierarchicalParams UPGMA) 100 20
---  loopHierarchical (HierarchicalParams UPGMA) 20
+--  loopHMeans (HierarchicalParams UPGMA) 100 20
+  loopHierarchical (HierarchicalParams UPGMA) 20
 
 --  loopHMeans (KMeansParams 1000) 100 20
 --  loopKMeans (KMeansParams 1000) 20 

@@ -14,6 +14,8 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Vector.Unboxed as UV
 import qualified Data.Vector as V
 
+import System.Random
+
 import Debug.Trace
 import Control.Exception.Base
 
@@ -70,6 +72,7 @@ runHierarchical params pcls = Partition $ IMap.fromList $ zip [0..] $ map dendro
 runKMeansIO :: Vector v => Params -> String -> (String -> IO [BasicData v]) -> IO (Partition v)
 runKMeansIO parameters inputFile inputSource = 
   do let k = nClusters parameters
+     let prob = 0.9 :: Double 
      let nIters = maxIters $ hParams parameters
 
      let kmeansStep :: Vector v => String -> (String -> IO [BasicData v]) -> IMap.IntMap (Cluster v) -> IO (IMap.IntMap (Cluster v))
@@ -90,16 +93,27 @@ runKMeansIO parameters inputFile inputSource =
               if p == p' then pIO
               else kmeans inputFile inputSource (n-1) (return p')
            
+     let generateRandom :: RandomGen g => g -> [Bool]
+         generateRandom gen = let (x, gen') = randomR (0.0, 1.0) gen in (x < prob) : generateRandom gen'
+
+     let randomInitialize :: Vector v => Int -> Int -> [Bool] -> [Cluster v] -> [Cluster v]
+         randomInitialize 0 _ _      _          = []
+         randomInitialize n m (b:bs) cs@(c:cs') 
+           | n == m    = cs
+           | otherwise = if b then
+                           c : randomInitialize (n-1) (m-1) bs cs'
+                         else
+                           randomInitialize n (m-1) bs cs'
+
+
+     randomSeed <- getStdGen
 
      let initial = inputSource inputFile 
-                     >>= wrap (take k) 
                      >>= wrap (map toCluster)
+                     >>= wrap (randomInitialize k (nDataPoints parameters) $ generateRandom randomSeed)
                      >>= wrap (zip [0..]) 
-                     >>= wrap (IMap.fromAscList)    
+                     >>= wrap IMap.fromAscList    
      
-     aoeu <- initial
-     putStrLn $ show aoeu
-
      kmeans inputFile inputSource nIters initial >>= wrap Partition
 
 
